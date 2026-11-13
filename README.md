@@ -1,5 +1,6 @@
-# TP4 part 2 
+# TP 4 — JavaScript.2
 
-# Binome 
-Oussama Kafif 242431776105 /n
-Tarek Kara
+## Binôme
+
+- Oussama Kafif — 242431776105
+- Kara Tarek
