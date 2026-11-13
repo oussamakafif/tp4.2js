@@ -1,0 +1,18 @@
+#table_container { font-family: Calibri, sans-serif; text-align: center; margin: 0 auto; width: 600px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 10px; margin-top: 20px; }
+th, td { border: 1px solid #333; padding: 5px; }
+.col_number { text-align: center; }
+.col_text { text-align: left; }
+.col_chkbox { text-align: center; }
+
+#form_container { background: #f0f0f0; padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
+.form_group { display: flex; align-items: center; margin-right: 10px; }
+.form_label { margin-right: 5px; font-weight: bold; }
+.form_field { padding: 4px; border: 1px solid #ccc; border-radius: 3px; }
+
+#container_summary { background: #e0f7fa; padding: 10px; display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; border-radius: 5px; }
+#container_btn { display: flex; justify-content: space-around; margin-top: 15px; }
+.btn-add { background: #4CAF50; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+.btn-del { background: #f44336; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+.btn-consol { background: #2196F3; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+button:hover { opacity: 0.9; }

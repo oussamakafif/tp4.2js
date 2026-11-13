@@ -1,0 +1,6 @@
+#table_container { font-family: Calibri, sans-serif; text-align: center; margin: 0 auto; width: 600px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 10px; margin-top: 20px; }
+th, td { border: 1px solid #333; padding: 5px; }
+.col_number { text-align: center; }
+.col_text { text-align: left; }
+.col_chkbox { text-align: center; }

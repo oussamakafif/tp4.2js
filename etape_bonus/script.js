@@ -1,0 +1,163 @@
+"use strict"; // Slide 2: mode strict
+
+let lignes = 0; // Slides 24-26: compteur des lignes
+let total_points = 0; // Slides 36-38: total des points
+let persons = [
+    { nom: "nom-1", prenom: "prenom-1", points: 5 },
+    { nom: "nom-2", prenom: "prenom-2", points: 10 },
+    { nom: "nom-3", prenom: "prenom-3", points: 15 }
+]; // Slide 20: tableau d'objets
+
+function doInsertRowTable(num, nom, prenom, points) { // Slide 14: manipulation du DOM
+    const tableBody = document.querySelector("table tbody");
+    const row = document.createElement("tr");
+    row.setAttribute("num", num);
+
+    const values = [num, nom, prenom, points];
+    const classes = ["col_number", "col_text", "col_text", "col_number"];
+
+    values.forEach((value, index) => {
+        const cell = document.createElement("td");
+        cell.className = classes[index];
+        cell.textContent = value;
+        row.appendChild(cell);
+    });
+
+    const checkboxCell = document.createElement("td");
+    checkboxCell.className = "col_chkbox";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkboxCell.appendChild(checkbox);
+    row.appendChild(checkboxCell);
+    tableBody.appendChild(row);
+}
+
+function init() { // Slides 22-26: initialisation et parcours du tableau
+    const initialPersons = persons.slice();
+    persons = [];
+    lignes = 0;
+    total_points = 0;
+    document.querySelector("table tbody").replaceChildren();
+
+    for (const person of initialPersons) {
+        doInsert(person.nom, person.prenom, person.points);
+    }
+}
+
+function doInsert(nom, prenom, points) { // Slides 24-26, 38-42: insertion et résumé
+    const person = { nom, prenom, points: Number(points) };
+    lignes++;
+    total_points += person.points;
+    persons.push(person);
+    doInsertRowTable(lignes, person.nom, person.prenom, person.points);
+    update_summary();
+    filterByName();
+}
+
+function consoleTableau() { // Slides 29-30: affichage du tableau dans la console
+    console.log(persons);
+}
+
+function update_summary() { // Slides 40-42: mise à jour de l'espace résumé
+    document.getElementById("p1").textContent = lignes + " ligne(s)";
+    document.getElementById("p3").textContent = "Total point(s)= " + total_points;
+}
+
+function doNewData() { // Slides 51-55: lecture et validation des champs
+    const nomInput = document.getElementById("form_nom");
+    const prenomInput = document.getElementById("form_prenom");
+    const pointsInput = document.getElementById("form_points");
+    const nom = nomInput.value.trim();
+    const prenom = prenomInput.value.trim();
+    const pointsValue = pointsInput.value.trim();
+    const points = Number(pointsValue);
+
+    if (nom === "" || prenom === "" || pointsValue === "" || !Number.isFinite(points)) {
+        alert("Veuillez remplir tous les champs avec des valeurs valides.");
+        return;
+    }
+
+    doInsert(nom, prenom, points);
+    nomInput.value = "";
+    prenomInput.value = "";
+    pointsInput.value = "";
+}
+
+function deleteRow() { // Slides 60-62: suppression des lignes sélectionnées
+    if (lignes === 0) {
+        alert("Le tableau est vide !");
+        return;
+    }
+
+    const tableBody = document.querySelector("table tbody");
+    const rows = Array.from(tableBody.rows);
+    const selectedRows = rows.filter(row => row.querySelector("input[type='checkbox']").checked);
+
+    if (selectedRows.length === 0) {
+        alert("Sélectionnez au moins une ligne !");
+        return;
+    }
+
+    if (!confirm("Voulez-vous vraiment supprimer les lignes sélectionnées ?")) {
+        return;
+    }
+
+    for (let index = rows.length - 1; index >= 0; index--) {
+        const row = rows[index];
+        if (!row.querySelector("input[type='checkbox']").checked) {
+            continue;
+        }
+
+        total_points -= persons[index].points;
+        persons.splice(index, 1);
+        row.remove();
+    }
+
+    lignes = persons.length;
+    Array.from(tableBody.rows).forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+        row.setAttribute("num", index + 1);
+    });
+    update_summary();
+    filterByName();
+}
+
+function clearAll() { // Bonus 1: vider le tableau
+    if (!confirm("Voulez-vous tout vider ?")) {
+        return;
+    }
+
+    document.querySelector("table tbody").replaceChildren();
+    persons = [];
+    lignes = 0;
+    total_points = 0;
+    document.getElementById("search_nom").value = "";
+    update_summary();
+}
+
+function filterByName() { // Bonus 2: filtrer les personnes par nom
+    const query = document.getElementById("search_nom").value.trim().toLocaleLowerCase();
+    document.querySelectorAll("table tbody tr").forEach(row => {
+        const nom = row.cells[1].textContent.toLocaleLowerCase();
+        row.hidden = !nom.includes(query);
+    });
+}
+
+function highlightMax() { // Bonus 3: surligner la personne ayant le plus de points
+    const rows = Array.from(document.querySelectorAll("table tbody tr"));
+    rows.forEach(row => {
+        row.style.backgroundColor = "";
+    });
+
+    const visibleRows = rows.filter(row => !row.hidden);
+    if (visibleRows.length === 0) {
+        return;
+    }
+
+    const maxPoints = Math.max(...visibleRows.map(row => Number(row.cells[3].textContent)));
+    visibleRows
+        .filter(row => Number(row.cells[3].textContent) === maxPoints)
+        .forEach(row => {
+            row.style.backgroundColor = "#ffeb3b";
+        });
+}
